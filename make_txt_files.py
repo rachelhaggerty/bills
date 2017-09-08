@@ -1,34 +1,26 @@
+#!/usr/bin/env python
+
+"""
+
+This script grabs the text from the HTM files and
+creates an individual .txt file for each bill in 
+./bills/tx/data/text 
+These files include the text of the bills as a single Unicode string
+
+"""
+
 from __future__ import print_function
 
-import os
-from ftplib import FTP
-from bs4 import BeautifulSoup
-import pandas as pd
-from sklearn.feature_extraction.text import CountVectorizer
-from sklearn.base import TransformerMixin
-from sklearn.datasets import load_files
-from sklearn.pipeline import Pipeline
-from sklearn.svm import LinearSVC
-from sklearn.feature_extraction.stop_words import ENGLISH_STOP_WORDS
-from sklearn import metrics
-from sklearn.metrics import accuracy_score
-from sklearn.feature_extraction.text import TfidfTransformer
-# import nltk
-from nltk.corpus import stopwords
-from nltk import tokenize
-import string
-import numpy as np
-import re
 import glob
+import os
+import re
+
+from bs4 import BeautifulSoup
 from io import open
 
 
-#do this stuff? ionno
-# import nltk 
-# nltk.download("stopwords")
-# nltk.download('punkt')
-
 local_dir = '/Users/rhaggerty/remote/bills/tx/data/'
+
 
 def is_empty(file):
     file_size=os.stat(file).st_size
@@ -38,9 +30,7 @@ def is_empty(file):
     return False
 
 
-#make sure html file isn't empty, if it is, remove it
 def prettify_soup(doc_name):
-#     'HB00098I'
     bill_no = doc_name.split('/')[-1].rstrip('.htm')
     output_dir = os.path.join(local_dir, 'text/')
     
@@ -53,5 +43,7 @@ def prettify_soup(doc_name):
             with open(output_dir + bill_no + '.txt', 'w+', encoding='utf-8') as out_file:
                 out_file.write(pretty_text)
 
-for doc_name in glob.glob(local_dir + 'html/*.htm'):
-    prettify_soup(doc_name)
+
+if __name__ == '__main__':
+    for doc_name in glob.glob(local_dir + 'html/*.htm'):
+        prettify_soup(doc_name)
