@@ -9,8 +9,6 @@ These files include the text of the bills as a single Unicode string
 
 """
 
-from __future__ import print_function
-
 import glob
 import os
 import re

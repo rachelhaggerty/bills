@@ -14,9 +14,10 @@ File Name   Description
 <bill suffix>   5-digit number
 <bill version>  I=Introduced, S=Senate Committee Report, H=House Committee Report, E=Engrossed, F=Enrolled
 
-"""
+FTP Directory structure:
+/bills/<legislative session>/<document type>/<text format>/<bill type>/<grouping of 100 bills>
 
-from __future__ import print_function
+"""
 
 import os
 import sys
@@ -27,7 +28,6 @@ from ftplib import FTP
 def get_files():
     ftp = FTP('ftp.legis.state.tx.us')
     ftp.login()
-    '''Directory structure: /bills/<legislative session>/<document type>/<text format>/<bill type>/<grouping of 100 bills>'''
     ftp.cwd('/bills/851/billtext/html/house_bills/{}'.format(sys.argv[1]))
     files = ftp.nlst()
     html_dir = './tx/data/html'

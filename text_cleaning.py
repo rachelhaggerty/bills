@@ -2,7 +2,7 @@
 
 """ Clean text for analysis """
 
-from __future__ import print_function
+
 
 import os
 import re
@@ -22,14 +22,14 @@ def summary_dict():
             full_text = in_file.read()
             sentences_list = tokenize.sent_tokenize(full_text)
             summary_tag = re.compile('A BILL TO BE ENTITLED')
-            summary_sentences = filter(summary_tag.search, sentences_list)
+            summary_sentences = list(filter(summary_tag.search, sentences_list))
             for sentence in summary_sentences:
                 cleaned_sentence = \
                         re.sub('.*A BILL TO BE ENTITLED AN ACT relating to ', 
                                 '', sentence)
         summary_list.append(cleaned_sentence)
         bill_no_list.append(bill_no)
-    bill_summaries = zip(bill_no_list, summary_list)
+    bill_summaries = list(zip(bill_no_list, summary_list))
     for bill, summary in bill_summaries:
         summary_dict[bill] = summary
     return summary_dict
