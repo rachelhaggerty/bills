@@ -18,64 +18,70 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.manifold import MDS
 from sklearn.metrics.pairwise import cosine_similarity
 
-local_dir = '/Users/rhaggerty/remote/bills/tx/data/'
+class TextPrep(object):
+    def __init__(self, local_dir):
+        self.local_dir = local_dir
+        self.files = glob.glob(self.local_dir + 'text/*.txt')
 
 
-def summary_dict():
-    summary_list = []
-    bill_no_list = []
-    summary_dict = {}
-    for doc_name in glob.glob(local_dir + 'text/*.txt'):
-        bill_no = doc_name.split('/')[-1].rstrip('.txt')
-        with open(doc_name, 'rt') as in_file:
-            full_text = in_file.read()
-            sentences_list = tokenize.sent_tokenize(full_text)
-            summary_tag = re.compile('A BILL TO BE ENTITLED')
-            summary_sentences = list(filter(summary_tag.search, sentences_list))
-            for sentence in summary_sentences:
-                cleaned_sentence = \
+    def summary_list(self):
+        summary_list = []
+        for doc_name in self.files:
+            with open(doc_name, 'rt') as in_file:
+                full_text = in_file.read()
+                sentences_list = tokenize.sent_tokenize(full_text)
+                summary_tag = re.compile('A BILL TO BE ENTITLED')
+                summary_sentences = list(filter(summary_tag.search, sentences_list))
+                for sentence in summary_sentences:
+                    cleaned_sentence = \
                         re.sub('.*A BILL TO BE ENTITLED AN ACT relating to ', 
                                 '', sentence)
-        summary_list.append(cleaned_sentence)
-        bill_no_list.append(bill_no)
-    bill_summaries = list(zip(bill_no_list, summary_list))
-    for bill, summary in bill_summaries:
-        summary_dict[bill] = summary
-    return summary_dict
+            summary_list.append(cleaned_sentence)
+        return summary_list
+  
+    
+    def bill_name_list(self):
+        bill_name_list = [doc_name.split('/')[-1].rstrip('.txt')
+                          for doc_name in self.files]
+        return bill_name_list
 
 
-def tokenize_text(text):
-    tokens = [word.lower() for sent in tokenize.sent_tokenize(text) for word in tokenize.word_tokenize(sent)]
-    filtered_tokens = []
-    for token in tokens:
-        if re.search('[a-zA-Z]', token):
-            filtered_tokens.append(token)
-    return filtered_tokens
+    def summary_dict(self):
+        summary_dict = {}
+        bill_summaries = list(zip(self.bill_name_list(), self.summary_list()))
+        for bill, summary in bill_summaries:
+            summary_dict[bill] = summary
+        return summary_dict
 
 
-def tokenize_and_stem(text):
-    stemmer = SnowballStemmer('english')
-    allwords_tokenized = tokenize_text(text)
-    stems = [stemmer.stem(t) for t in allwords_tokenized]
-    return stems
+    def tokenize_text(self, text):
+        all_tokens = [word.lower()
+                      for sent in tokenize.sent_tokenize(text)
+                      for word in tokenize.word_tokenize(sent)]
+        tokens = []
+        for token in all_tokens:
+            if re.search('[a-zA-Z]', token):
+                tokens.append(token)
+        return tokens
+ 
 
+    def tokenize_and_stem(self, text):
+        stemmer = SnowballStemmer('english')
+        stems = [stemmer.stem(token) for token in self.tokenize_text(text)]
+        return stems
 
-def build_vocab_df():
-    full_summaries = summary_dict()
-    summary_list = list(full_summaries.values())
-    names_list = list(full_summaries.keys())
-    vocab_stemmed = []
-    vocab_tokenized = []
-    for summary in summary_list:
-        words_tokenized = tokenize_text(summary)
-        words_stemmed = tokenize_and_stem(summary)
-
-        vocab_tokenized.extend(words_tokenized)
-        vocab_stemmed.extend(words_stemmed)
-
-    vocab_df = pd.DataFrame({'words': vocab_tokenized}, index = vocab_stemmed)
-    return vocab_df
-
+        
+        
+    def build_vocab_df(self):
+        vocab_stemmed = [words_stemmed
+                         for summary in self.summary_list()
+                         for words_stemmed in self.tokenize_and_stem(summary)]
+        vocab_tokenized = [words_tokenized
+                           for summary in self.summary_list()
+                           for words_tokenized in self.tokenize_text(summary)]
+        vocab_df = pd.DataFrame({'words': vocab_tokenized},
+                                index = vocab_stemmed)
+        return vocab_df
 
 tfidf_vectorizer = TfidfVectorizer(max_df=.8, stop_words='english',
                                  use_idf=True, tokenizer=tokenize_and_stem,)
