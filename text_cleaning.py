@@ -18,11 +18,11 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.manifold import MDS
 from sklearn.metrics.pairwise import cosine_similarity
 
+
 class TextPrep(object):
     def __init__(self, local_dir):
         self.local_dir = local_dir
         self.files = glob.glob(self.local_dir + 'text/*.txt')
-
 
     def summary_list(self):
         summary_list = []
@@ -31,20 +31,19 @@ class TextPrep(object):
                 full_text = in_file.read()
                 sentences_list = tokenize.sent_tokenize(full_text)
                 summary_tag = re.compile('A BILL TO BE ENTITLED')
-                summary_sentences = list(filter(summary_tag.search, sentences_list))
+                summary_sentences = list(filter(summary_tag.search,
+                                                sentences_list))
                 for sentence in summary_sentences:
                     cleaned_sentence = \
-                        re.sub('.*A BILL TO BE ENTITLED AN ACT relating to ', 
-                                '', sentence)
+                        re.sub('.*A BILL TO BE ENTITLED AN ACT relating to ',
+                               '', sentence)
             summary_list.append(cleaned_sentence)
         return summary_list
-  
-    
+
     def bill_name_list(self):
         bill_name_list = [doc_name.split('/')[-1].rstrip('.txt')
                           for doc_name in self.files]
         return bill_name_list
-
 
     def summary_dict(self):
         summary_dict = {}
@@ -52,7 +51,6 @@ class TextPrep(object):
         for bill, summary in bill_summaries:
             summary_dict[bill] = summary
         return summary_dict
-
 
     def tokenize_text(self, text):
         all_tokens = [word.lower()
@@ -64,14 +62,11 @@ class TextPrep(object):
                 tokens.append(token)
         return tokens
  
-
     def tokenize_and_stem(self, text):
         stemmer = SnowballStemmer('english')
         stems = [stemmer.stem(token) for token in self.tokenize_text(text)]
         return stems
-
-        
-        
+    
     def build_vocab_df(self):
         vocab_stemmed = [words_stemmed
                          for summary in self.summary_list()
@@ -80,12 +75,5 @@ class TextPrep(object):
                            for summary in self.summary_list()
                            for words_tokenized in self.tokenize_text(summary)]
         vocab_df = pd.DataFrame({'words': vocab_tokenized},
-                                index = vocab_stemmed)
+                                index=vocab_stemmed)
         return vocab_df
-
-tfidf_vectorizer = TfidfVectorizer(max_df=.8, stop_words='english',
-                                 use_idf=True, tokenizer=tokenize_and_stem,)
-full_summaries = summary_dict()
-summary_list = list(full_summaries.values())
-tfidf_matrix = tfidf_vectorizer.fit_transform(summary_list)
-terms = tfidf_vectorizer.get_feature_names()
