@@ -1,4 +1,4 @@
-# Project Title
+# State House of Representatives Bills Text Analysis
 
 This is a text analysis of bills proposed in the Texas State House of
 Representatives using Texas Legislature Online (TLO).
