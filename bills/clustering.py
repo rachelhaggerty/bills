@@ -1,10 +1,6 @@
 #!/usr/bin/env python
 
-import glob
 import os
-import re
-
-from io import open
 
 import matplotlib.pyplot as plt
 import pandas as pd
