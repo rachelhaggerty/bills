@@ -19,7 +19,6 @@ import pandas as pd
 
 
 class TextPrep(object):
-    #TODO: fix local_dir since removed it
     def __init__(self, local_dir):
         self.local_dir = local_dir
         self.files = glob.glob(self.local_dir + 'text/*.txt')
@@ -46,21 +45,14 @@ class TextPrep(object):
         return bill_name_list
 
     def summary_dict(self):
-        summary_dict = {}
-        bill_summaries = list(zip(self.bill_name_list(), self.summary_list()))
-        for bill, summary in bill_summaries:
-            summary_dict[bill] = summary
+        summary_dict = dict(zip(self.bill_name_list(), self.summary_list()))
         return summary_dict
 
     def tokenize_text(self, text):
         all_tokens = [word.lower()
                       for sent in tokenize.sent_tokenize(text)
                       for word in tokenize.word_tokenize(sent)]
-        tokens = []
-        for token in all_tokens:
-            if re.search('[a-zA-Z]', token):
-                tokens.append(token)
-                # yield token
+        tokens = [token for token in all_tokens if re.search('[a-zA-Z]', token)]
         return tokens
  
     def tokenize_and_stem(self, text):

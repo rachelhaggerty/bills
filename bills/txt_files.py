@@ -34,7 +34,9 @@ def prettify_soup(doc_name):
         with open(doc_name, 'rt') as in_file:
             soup = BeautifulSoup(in_file, 'html.parser') 
             pretty_text = soup.get_text(' ', strip=True)
-            with open(output_dir + bill_no + '.txt', 'w+', encoding='utf-8') as out_file:
+            with open(output_dir + bill_no + '.txt',
+                      'w+',
+                      encoding='utf-8') as out_file:
                 out_file.write(pretty_text)
 
 
