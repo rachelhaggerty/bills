@@ -1,6 +1,11 @@
 #!/usr/bin/env python
 
-""" Clean, tokenize, feature extraction for analysis """
+"""
+
+This module cleans, tokenizes, and creates a vocab 
+data frame for analysis
+
+"""
 
 import glob
 import os
@@ -51,12 +56,12 @@ class TextPrep(object):
         all_tokens = [word.lower()
                       for sent in tokenize.sent_tokenize(text)
                       for word in tokenize.word_tokenize(sent)]
-        # tokens = []
+        tokens = []
         for token in all_tokens:
             if re.search('[a-zA-Z]', token):
-                # tokens.append(token)
-                yield token
-        # return tokens
+                tokens.append(token)
+                # yield token
+        return tokens
  
     def tokenize_and_stem(self, text):
         stemmer = SnowballStemmer('english')
