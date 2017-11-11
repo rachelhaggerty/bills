@@ -1,25 +1,20 @@
-#!/usr/bin/env pythoni
+#!/usr/bin/env python
 
 """ Clean, tokenize, feature extraction for analysis """
 
 import glob
 import os
 import re
+
 from io import open
 
-import matplotlib.pyplot as plt
-from nltk.corpus import stopwords
 from nltk.stem.snowball import SnowballStemmer
 from nltk import tokenize
 import pandas as pd
-from sklearn.cluster import KMeans
-from sklearn.externals import joblib
-from sklearn.feature_extraction.text import TfidfVectorizer
-from sklearn.manifold import MDS
-from sklearn.metrics.pairwise import cosine_similarity
 
 
 class TextPrep(object):
+    #TODO: fix local_dir since removed it
     def __init__(self, local_dir):
         self.local_dir = local_dir
         self.files = glob.glob(self.local_dir + 'text/*.txt')
@@ -56,11 +51,12 @@ class TextPrep(object):
         all_tokens = [word.lower()
                       for sent in tokenize.sent_tokenize(text)
                       for word in tokenize.word_tokenize(sent)]
-        tokens = []
+        # tokens = []
         for token in all_tokens:
             if re.search('[a-zA-Z]', token):
-                tokens.append(token)
-        return tokens
+                # tokens.append(token)
+                yield token
+        # return tokens
  
     def tokenize_and_stem(self, text):
         stemmer = SnowballStemmer('english')

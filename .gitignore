@@ -1,6 +1,8 @@
 .DS_Store
 *.py.bak
 *.pk.*
+*.txt
+*.htm
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]

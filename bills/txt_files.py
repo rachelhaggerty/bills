@@ -4,20 +4,17 @@
 
 This script grabs the text from the HTM files and
 creates an individual .txt file for each bill in 
-./bills/tx/data/text 
+./tx-data/text 
+
 These files include the text of the bills as a single Unicode string
 
 """
 
 import glob
 import os
-import re
 
 from bs4 import BeautifulSoup
 from io import open
-
-
-local_dir = '/Users/rhaggerty/remote/bills/tx/data/'
 
 
 def is_empty(file):
@@ -30,8 +27,7 @@ def is_empty(file):
 
 def prettify_soup(doc_name):
     bill_no = doc_name.split('/')[-1].rstrip('.htm')
-    output_dir = os.path.join(local_dir, 'text/')
-    
+    output_dir = os.path.join(os.getcwd(), 'tx-data/text/')
     if (is_empty(doc_name)):
         os.remove(doc_name)
     else:
