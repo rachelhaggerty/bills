@@ -10,7 +10,7 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.manifold import MDS
 from sklearn.metrics.pairwise import cosine_similarity
 from sklearn.pipeline import Pipeline
-import pdb
+
 import bills.preprocess as pp
 
 
@@ -21,7 +21,7 @@ class Clustering(object):
         self.num_clusters = num_clusters
         self.tfidf_matrix, self.terms = self.vectorize()
         self.clusters, self.top_terms_dict = self.cluster()
-    # pdb.set_trace()
+
     def vectorize(self):
         tfidf_vectorizer = TfidfVectorizer(max_df=.8,
                                            stop_words='english',
