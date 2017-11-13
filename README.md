@@ -5,17 +5,8 @@ Representatives to extract thematic and semantic topics using several NLP techni
 
 ## Getting Started
 
-This project uses Conda for its environment.
+This project uses Python 3.6 and Conda for its environment.
 
-### Prerequisites
-
-
-```
-BeautifulSoup
-NLTK
-Pandas
-Sci-Kit Learn
-```
 
 ### Installing
 
