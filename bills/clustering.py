@@ -11,13 +11,13 @@ from sklearn.manifold import MDS
 from sklearn.metrics.pairwise import cosine_similarity
 from sklearn.pipeline import Pipeline
 
-import text_cleaning as tc
+import bills.preprocess as pp
 
 
 class Clustering(object):
     def __init__(self, local_dir, num_clusters):
-        self.local_dir = local_dir
-        self.text_clean = tc.TextPrep(local_dir)
+        self.local_dir = local_dir 
+        self.text_clean = pp.TextPrep(local_dir)
         self.num_clusters = num_clusters
         self.tfidf_matrix, self.terms = self.vectorize()
         self.clusters, self.top_terms_dict = self.cluster()
@@ -83,5 +83,5 @@ class Clustering(object):
 
 
 if __name__ == '__main__':
-    doit = Clustering('/Users/rhaggerty/remote/bills/tx/data/', 4)
+    doit = Clustering('/Users/rhaggerty/remote/bills/tx-data/', 4)
     doit.plot()
