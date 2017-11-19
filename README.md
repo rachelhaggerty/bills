@@ -22,7 +22,7 @@ Groups of 100 bill raw HTML files can be downloaded from the Texas Legislative O
 following script:
 
 ```
-./bills/ftp_files.py <group name> #group name like HB00001_HB00099
+./bills/src/ftp_files.py <group name> #group name like HB00001_HB00099
 ```
   
   Example bill: ftp://ftp.legis.state.tx.us/bills/851/billtext/html/house_bills/HB00001_HB00099/HB00001E.htm
@@ -31,7 +31,7 @@ The follow script will parse the text from the HTML files and write individual t
 bill to the local directory:
 
 ```
-./bills/txt_files.py
+./bills/src/txt_files.py
 ```
 
 ## Techniques for Topic Extraction

@@ -1,5 +1,12 @@
 #!/usr/bin/env python
 
+""" 
+
+This module vectorizes input text data
+builds a K-means cluster model and plots the results
+
+"""
+
 import os
 
 import matplotlib.pyplot as plt
@@ -78,10 +85,13 @@ class Clustering(object):
                            labelleft='off')
         ax.legend(numpoints=1, loc='lower left', bbox_to_anchor=(0, -0.1))
         for i in range(len(cluster_df)):
-            ax.text(cluster_df.loc[i]['x'], cluster_df.loc[i]['y'], cluster_df.loc[i]['title'], size=8)  
+            ax.text(cluster_df.loc[i]['x'],
+                    cluster_df.loc[i]['y'],
+                    cluster_df.loc[i]['title'],
+                    size=8)  
         plt.show()
 
 
 if __name__ == '__main__':
-    doit = Clustering('/Users/rhaggerty/remote/bills/tx-data/', 4)
-    doit.plot()
+    model = Clustering('./bills/tx-data/', 4)
+    model.plot()

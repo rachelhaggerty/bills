@@ -12,7 +12,6 @@ import os
 import re
 
 from io import open
-
 from nltk.stem.snowball import SnowballStemmer
 from nltk import tokenize
 import pandas as pd
