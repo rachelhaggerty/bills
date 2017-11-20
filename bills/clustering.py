@@ -13,17 +13,14 @@ Steps:
     6. Plot the points with the bill names as labels
 
 """
-
 import os
 
 import matplotlib.pyplot as plt
 import pandas as pd
 from sklearn.cluster import KMeans
-from sklearn.externals import joblib
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.manifold import MDS
 from sklearn.metrics.pairwise import cosine_similarity
-from sklearn.pipeline import Pipeline
 
 import bills.preprocess as pp
 
@@ -31,18 +28,17 @@ import bills.preprocess as pp
 class Clustering(object):
     def __init__(self, local_dir, num_clusters):
         self.local_dir = local_dir 
-        self.text_clean = pp.TextPrep(local_dir)
+        self.preprocess= pp.TextPrep(local_dir)
         self.num_clusters = num_clusters
         self.tfidf_matrix, self.terms = self.vectorize()
         self.clusters, self.top_terms_dict = self.cluster()
 
     def vectorize(self):
         tfidf_vectorizer = TfidfVectorizer(max_df=.8,
-                                           stop_words='english',
                                            use_idf=True,
-                                           tokenizer=self.text_clean.tokenize_and_stem
+                                           tokenizer=self.preprocess.tokenize_and_stem
                                           )
-        full_summaries = self.text_clean.summary_dict()
+        full_summaries = self.preprocess.summary_dict()
         summary_list = list(full_summaries.values())
         tfidf_matrix = tfidf_vectorizer.fit_transform(summary_list)
         terms = tfidf_vectorizer.get_feature_names()
@@ -53,7 +49,7 @@ class Clustering(object):
         km = KMeans(n_clusters=num_clusters)
         km.fit(self.tfidf_matrix)
         clusters = km.labels_.tolist()
-        vocab_df = self.text_clean.build_vocab_df()
+        vocab_df = self.preprocess.build_vocab_df()
         order_centroids = km.cluster_centers_.argsort()[:, ::-1] 
         top_terms_dict = {}
         for cluster in range(self.num_clusters):
@@ -75,7 +71,7 @@ class Clustering(object):
         cluster_df = pd.DataFrame(dict(x=xs,
                                        y=ys,
                                        label=self.clusters,
-                                       title=self.text_clean.bill_name_list()))
+                                       title=self.preprocess.bill_name_list()))
         groups = cluster_df.groupby('label')
         fig, ax = plt.subplots(figsize=(17, 9))
         ax.margins(0.05)
@@ -100,5 +96,5 @@ class Clustering(object):
 
 
 if __name__ == '__main__':
-    model = Clustering('./bills/tx-data/', 4)
+    model = Clustering('./tx-data/', 4)
     model.plot()

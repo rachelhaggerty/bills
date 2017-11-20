@@ -13,6 +13,7 @@ import re
 
 from io import open
 from nltk.stem.snowball import SnowballStemmer
+from nltk.corpus import stopwords
 from nltk import tokenize
 import pandas as pd
 
@@ -48,17 +49,23 @@ class TextPrep(object):
         return summary_dict
 
     def tokenize_text(self, text):
+        stopwords_set = set(stopwords.words('english'))
+        more_words = ['certain', 'act', 'January', 'February', 'March',
+                      'April', 'May', 'June', 'July', 'August', 'September',
+                      'October', 'November', 'December']
+        stopwords_set.update(more_words)
         all_tokens = [word.lower()
                       for sent in tokenize.sent_tokenize(text)
-                      for word in tokenize.word_tokenize(sent)]
+                      for word in tokenize.word_tokenize(sent)
+                      if word not in stopwords_set]
         tokens = [token for token in all_tokens if re.search('[a-zA-Z]', token)]
         return tokens
- 
+
     def tokenize_and_stem(self, text):
         stemmer = SnowballStemmer('english')
         stems = [stemmer.stem(token) for token in self.tokenize_text(text)]
         return stems
-    
+
     def build_vocab_df(self):
         vocab_stemmed = [words_stemmed
                          for summary in self.summary_list()
