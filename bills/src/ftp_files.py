@@ -5,7 +5,7 @@ This script pulls 100 State of Texas House Bill HTML files of the 851
 legislative session from state.tx.us FTP server and saves them locally
 as individual .htm files.
 
-Usage: ./ftp_files.py <group name> #group name like HB00001_HB00099
+Usage: ./bills/src/ftp_files.py <group name> #group name like HB00001_HB00099
 
 The naming convention for individual documents is: <bill chamber><bill type><bill suffix><bill version>
 File Name   Description
