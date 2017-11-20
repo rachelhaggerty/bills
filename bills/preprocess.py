@@ -2,8 +2,8 @@
 
 """
 
-This module cleans, tokenizes, and creates a vocab 
-data frame for analysis
+This module cleans, tokenizes, and creates a vocabulary
+data frame for analysis using the summary sentences of the TX State House Bills
 
 """
 

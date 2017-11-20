@@ -2,8 +2,15 @@
 
 """ 
 
-This module vectorizes input text data
-builds a K-means cluster model and plots the results
+Builds a K-means cluster model on the bill summary sentences and plots the results
+
+Steps:
+    1. Generate Tf-idf matrix
+    2. Generate clusters (number given in parameter) using K-Means
+    3. Generate cosine similarity matrix using the tf-idf matrix
+    4. Generate the distance matrix (1 - similarity matrix), so each pair of synopsis has a distance number between 0 and 1
+    5. Use multidimensional scaling (MDS) to convert distance matrix to a 2-dimensional array
+    6. Plot the points with the bill names as labels
 
 """
 
