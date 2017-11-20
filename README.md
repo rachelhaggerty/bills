@@ -14,6 +14,8 @@ This project uses Python 3.6 and Conda for its environment.
 (1) clone the repository
 (2) run $ conda env create
 (3) run $ source activate ENV_NAME
+
+Download NLTK (nltk.download())
 ```
 
 ## Downloading the Data
